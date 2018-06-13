@@ -162,7 +162,7 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
-    let result;
+    let result, start;
     if (accumulator !== undefined) {
       result = accumulator;
     } else {
@@ -170,9 +170,9 @@
     }
     
     if (!accumulator) {
-      let start = 1;
+      start = 1;
     } else {
-      let start = 0;
+      start = 0;
     }
     
     for (let i = start; i < collection.length; i++) {
@@ -337,19 +337,17 @@
     // of called again
     // return cached
     
-    let result = function() {
-      let cache = {};
-      let n = arguments[0];
-      if (cache[n]) {
-        return cache[n]; 
-      } else {
-        cache[n] = func.apply();
-        return cache[n];
+    let results = {};
+    return function() {
+      let args = Array.prototype.slice.call(arguments);
+      let key = JSON.stringify(args);
+
+      if (!(key in results)) {
+        results[key] = func.apply(this, args);
       }
-      
+
+      return results[key];
     };
-    
-    return result;
     
   };
 
@@ -360,8 +358,11 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    
     let args = arguments;
-    setTimeout(function() { func(args[2], args[3]); }, wait );
+    
+    setTimeout(() => func(args[2], args[3]), wait );
+    
   };
 
 
@@ -376,6 +377,18 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    let result = array.slice();
+    
+    let j, x, i;
+    
+    for (i = result.length - 1; i > 0; i--) {
+      j = Math.floor(Math.random() * (i + 1));
+      x = result[i];
+      result[i] = result[j];
+      result[j] = x;
+    }
+    
+    return result;
   };
 
 
