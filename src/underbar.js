@@ -403,6 +403,11 @@
   // Calls the method named by functionOrKey on each value in the list.
   // Note: You will need to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
+    let helper = function() {
+      functionOrKey.apply(this, args);
+    };
+    
+    return _.each(collection, helper);
   };
 
   // Sort the object's values by a criterion produced by an iterator.
@@ -417,7 +422,31 @@
   //
   // Example:
   // _.zip(['a','b','c','d'], [1,2,3]) returns [['a',1], ['b',2], ['c',3], ['d',undefined]]
-  _.zip = function() {
+  _.zip = function(arr1) {
+    
+    let args = arguments;
+    let result = [];
+    
+    let findMax = function(arrayThing) {
+      let max = 0;
+      for (let i = 0; i < arrayThing.length; i++) {
+        if (arrayThing[i].length > max) {
+          max = arrayThing[i].length;
+        }
+      }
+      return max;
+    };
+    
+    let len = findMax(args);
+    for (let j = 0; j < args.length; j++) {
+      let temp = [];
+      for (let i = 0; i < len; i++) {
+        temp.push(args[i][j]);
+      }
+      result.push(temp);
+    }
+ 
+    return result;
   };
 
   // Takes a multidimensional array and converts it to a one-dimensional array.
@@ -425,16 +454,38 @@
   //
   // Hint: Use Array.isArray to check if something is an array
   _.flatten = function(nestedArray, result) {
+    
   };
 
   // Takes an arbitrary number of arrays and produces an array that contains
   // every item shared between all the passed-in arrays.
   _.intersection = function() {
+    let result = [];
+    let args = arguments;
+    let everything = [];
+    
+    for (let i = 0; i < args.length; i++) {
+      for (let j = i; j < args[i].length; j++) {
+        everything.push(args[i][j]);
+      }
+    }
+    
+    for (let i = 0; i < args.length; i++) {
+      for (let j = 0; j < args[i].length; j++) {
+        if (_.every(everything, function(el) { return everything.includes(el); })) {
+          result.push(args[i][j]);
+        }
+      }
+    }
+    
+    console.log(result); 
+    return result;
   };
 
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
   _.difference = function(array) {
+    
   };
 
   // Returns a function, that, when invoked, will only be triggered at most once
@@ -443,5 +494,6 @@
   //
   // Note: This is difficult! It may take a while to implement.
   _.throttle = function(func, wait) {
+    
   };
 }());
