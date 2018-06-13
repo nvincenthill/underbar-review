@@ -57,7 +57,7 @@
       }
     } else {
       for (let prop in collection) {
-        iterator(collection[prop], prop, collection)
+        iterator(collection[prop], prop, collection);
       }
     }
   };
@@ -163,18 +163,16 @@
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
     let result;
-    if (accumulator != undefined) {
+    if (accumulator !== undefined) {
       result = accumulator;
     } else {
       result = collection[0];
     }
     
-    let start;
-    
     if (!accumulator) {
-      start = 1;
+      let start = 1;
     } else {
-      start = 0;
+      let start = 0;
     }
     
     for (let i = start; i < collection.length; i++) {
@@ -262,18 +260,7 @@
    *
    * In this section, we'll look at a couple of helpers for merging objects.
    */
-
-  // Extend a given object with all the properties of the passed in
-  // object(s).
-  //
-  // Example:
-    // var obj1 = {key1: "something"};
-    // _.extend(obj1, {
-    //   key2: "something new",
-    //   key3: "something else new"
-    // }, {
-    //   bla: "even more stuff"
-  //   }); // obj1 now contains key1, key2, key3 and bla
+   
   _.extend = function(obj) {
     for (let i = 1; i < arguments.length; i++) {
       for (let prop in arguments[i]) {
@@ -345,10 +332,11 @@
     // return a new function
     
     // characteristics
-      // should call func once and only once
+    // should call func once and only once
       
-      // of called again
-        // return cached 
+    // of called again
+    // return cached
+    
     let result = function() {
       let cache = {};
       let n = arguments[0];
@@ -372,6 +360,8 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    let args = arguments;
+    setTimeout(function() { func(args[2], args[3]); }, wait );
   };
 
 
