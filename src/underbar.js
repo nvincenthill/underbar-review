@@ -188,24 +188,71 @@
   _.contains = function(collection, target) {
     // TIP: Many iteration problems can be most easily expressed in
     // terms of reduce(). Here's a freebie to demonstrate!
-    return _.reduce(collection, function(wasFound, item) {
-      if (wasFound) {
-        return true;
+    // return _.reduce(collection, function(wasFound, item) {
+    //   if (wasFound) {
+    //     return true;
+    //   }
+    //   return item === target;
+    // }, false);
+    
+    let result = false;
+    if (Array.isArray(collection)) {    
+      for (let i = 0; i < collection.length; i++) {
+        if (collection[i] === target) {
+          result = true;
+        }
+      }  
+    } else {
+      for (let prop in collection) {
+        if (collection[prop] === target) {
+          result = true;
+        }
       }
-      return item === target;
-    }, false);
+    } 
+    return result;
   };
 
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    // return _.reduce(collection, iterator) {
+    //   if ()
+    // }
+    if (!iterator) {
+      iterator = _.identity;
+    }
+    
+    let result = true;
+    if (Array.isArray(collection)) {    
+      for (let i = 0; i < collection.length; i++) {
+        if (!iterator(collection[i])) {
+          result = false;
+        }
+      }  
+    } 
+    return result;
+    
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    if (!iterator) {
+      iterator = _.identity;
+    }
+    
+    let result = false;
+    if (Array.isArray(collection)) {    
+      for (let i = 0; i < collection.length; i++) {
+        if (iterator(collection[i])) {
+          result = true;
+        }
+      }  
+    } 
+    return result;
+    
   };
 
 
@@ -220,19 +267,35 @@
   // object(s).
   //
   // Example:
-  //   var obj1 = {key1: "something"};
-  //   _.extend(obj1, {
-  //     key2: "something new",
-  //     key3: "something else new"
-  //   }, {
-  //     bla: "even more stuff"
+    // var obj1 = {key1: "something"};
+    // _.extend(obj1, {
+    //   key2: "something new",
+    //   key3: "something else new"
+    // }, {
+    //   bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    for (let i = 1; i < arguments.length; i++) {
+      for (let prop in arguments[i]) {
+        obj[prop] = arguments[i][prop]; 
+      }
+    }
+    
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    for (let i = 1; i < arguments.length; i++) {
+      for (let prop in arguments[i]) {
+        if (obj[prop] === undefined) {
+          obj[prop] = arguments[i][prop]; 
+        }
+      }
+    }
+    
+    return obj;
   };
 
 
@@ -276,6 +339,30 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    
+    // check to see if function has been called 
+    // call the func and store result
+    // return a new function
+    
+    // characteristics
+      // should call func once and only once
+      
+      // of called again
+        // return cached 
+    let result = function() {
+      let cache = {};
+      let n = arguments[0];
+      if (cache[n]) {
+        return cache[n]; 
+      } else {
+        cache[n] = func.apply();
+        return cache[n];
+      }
+      
+    };
+    
+    return result;
+    
   };
 
   // Delays a function for the given number of milliseconds, and then calls
